@@ -7,16 +7,16 @@ spec:
     Expects an Snapshot deployed.
   params:
     - name: SNAPSHOT
-      description: Expected output of the application endpoint
+      description: 'Snapshot of the application in JSON form'
     - default: 'default'
       name: NAMESPACE
-      description: Namespace of the application under test
+      description: 'Namespace of the application under test'
     - default: "Hello World"
       name: EXPECTED_OUTPUT
-      description: Expected output of the application endpoint
+      description: 'Expected output of the application endpoint'
     - default: ""
       name: PORT
-      description: Application endpoint Port
+      description: 'Application endpoint Port'
   results:
     - name: TEST_OUTPUT
       description: Test output

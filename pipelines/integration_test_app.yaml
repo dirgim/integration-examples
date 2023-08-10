@@ -8,7 +8,7 @@ spec:
     A secret containing the kubeconfig for the environment needs to be mounted via the cluster-credentials workspace binding.
     The route to the single component is expected to have the same name as the component (default appstudio behavior).
   params:
-    - description: 'Snapshot of the application'
+    - description: 'Snapshot of the application in JSON form'
       name: SNAPSHOT
       default: '{"components": [{"name":"test-app", "containerImage": "quay.io/example/repo:latest"}]}'
       type: string
