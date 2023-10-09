@@ -32,7 +32,7 @@ spec:
           - name: url
             value: https://github.com/redhat-appstudio/integration-examples
           - name: revision
-            value: main
+            value: RHTAPBUGS-823-test
           - name: pathInRepo
             value: tasks/test_app_endpoint.yaml
       params:
