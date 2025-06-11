@@ -19,14 +19,14 @@ spec:
           value: SUCCESS
     - name: provision-env-with-ephemeral-namespace
       taskRef:
-        resolver: bundles
+        resolver: git
         params:
-          - name: bundle
-            value: quay.io/redhat-appstudio-tekton-catalog/task-eaas-provision-space:0.1@sha256:47cc4f5adfc2d0d5c6670a9c13f350e2dcd41bae3275497910e2fec900168c60
-          - name: name
-            value: eaas-provision-space
-          - name: kind
-            value: task
+          - name: url
+            value: https://github.com/dirgim/integration-examples
+          - name: revision
+            value: test-serviceaccount
+          - name: pathInRepo
+            value: tasks/eaas-provision-space.yaml
       params:
         - name: ownerName
           value: $(context.pipelineRun.name)
