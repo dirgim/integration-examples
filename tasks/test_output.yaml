@@ -11,8 +11,4 @@ spec:
       name: RESULT
       description: Test result to be generated
   steps:
-    - image: quay.io/konflux-ci/konflux-test:latest
-      script: |
-        TEST_OUTPUT=$(jq -rc --arg date $(date -u --iso-8601=seconds) --arg RESULT $(params.RESULT) --null-input \
-          '{result: $RESULT, timestamp: $date, failures: 0, successes: 0, warnings: 0}')
-        echo -n "${TEST_OUTPUT}" | tee $(results.TEST_OUTPUT.path)
+    - image: quay.io/redhat-user-workloads-stage/kpavic-tenant/dirgims-the-mentalist-quiz@sha256:256cc5ddda1721825f44e080904415d1219b3b0218866369ec6547aed12c979f
