@@ -1,0 +1,57 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: wait-for-integration-tests
+spec:
+  params:
+    - name: SCENARIOS_TO_CHECK
+      description: >-
+        A space-separated list of integrationTestScenarios that will be considered for the check, others will be ignored.
+        If this parameter is not set, the task will wait for any of the integrationTestScenarios that haven't completed.
+      default: ""
+      type: string
+  steps:
+    - name: test-metadata
+      image: quay.io/konflux-ci/konflux-test:latest
+      workingDir: /workspace
+      env:
+        - name: SCENARIOS_TO_CHECK
+          value: $(params.SCENARIOS_TO_CHECK)
+        - name: SNAPSHOT_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['appstudio.openshift.io/snapshot']
+      script: |
+        #!/bin/bash
+        
+        if [ -z "${SNAPSHOT_NAME}" ]
+        then
+          echo "Can't query integration test pipelines, 'appstudio.openshift.io/snapshot' label is not set."
+          exit 0
+        fi
+        
+        # We can set the task timeout if we want this loop to end before the pipeline timeout setting
+        while true
+        do
+          all_scenarios_completed=true
+          # Get the Snapshot's status annotation and find all scenarios that don't have completionTime set for them
+          scenarios_not_completed=$(oc get snapshots "${SNAPSHOT_NAME}" -o json | jq -r '.metadata.annotations["test.appstudio.openshift.io/status"]' | jq -r '.[] | select(.completionTime == null).scenario')
+          for scenario_name in $(echo -n "${scenarios_not_completed}")
+          do 
+            # If the SCENARIOS_TO_CHECK param is set, check if the scenario is listed in it - if not, ignore it
+            if [[ $(echo "${SCENARIOS_TO_CHECK}" | wc -w) -gt 0 && -z $(echo "${SCENARIOS_TO_CHECK}" | grep -w "${scenario_name}" ) ]]
+            then
+              echo "Skipped ${scenario_name} since it isn't listed in the SCENARIOS_TO_CHECK parameter"
+              continue
+            else
+              all_scenarios_completed=false
+              echo "The pipelineRun for scenario ${scenario_name} hasn't completed yet, waiting..."
+            fi
+          done
+          if [[ "${all_scenarios_completed}" == "true" ]]
+          then
+            echo "All required integration test scenarios for the Snapshot ${SNAPSHOT_NAME} have completed, ending the task."
+            break
+          fi
+          sleep 30
+        done
