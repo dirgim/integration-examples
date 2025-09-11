@@ -29,7 +29,7 @@ spec:
       description: The JSON string of the Snapshot under test
   steps:
     - name: test-metadata
-      image: quay.io/konflux-ci/konflux-test@sha256:latest
+      image: quay.io/konflux-ci/konflux-test:latest
       workingDir: /workspace
       env:
         - name: SNAPSHOT
