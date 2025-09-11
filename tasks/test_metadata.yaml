@@ -30,6 +30,7 @@ spec:
   steps:
     - name: test-metadata
       image: quay.io/konflux-ci/konflux-test@sha256:c306aa4b764fcade1cbea8b8f7b6166e3a1289f56e03be99f669b9aaf7a92363
+      imagePullPolicy: Always
       workingDir: /workspace
       env:
         - name: SNAPSHOT
