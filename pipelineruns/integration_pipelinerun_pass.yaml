@@ -41,4 +41,4 @@ spec:
       - name: kind
         value: pipeline
   taskRunTemplate:
-    serviceAccountName: konflux-integration-runner2
+    serviceAccountName: konflux-integration-runner
