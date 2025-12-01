@@ -40,5 +40,5 @@ spec:
         value: integration-pipeline-pass
       - name: kind
         value: pipeline
-  taskRunSpecs:
-    serviceAccountName: something-nonexistent
+  taskRunTemplate:
+    serviceAccountName: konflux-integration-runner
