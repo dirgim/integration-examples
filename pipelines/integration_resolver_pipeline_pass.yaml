@@ -3,6 +3,9 @@ kind: Pipeline
 metadata:
   name: integration-resolver-pipeline-pass
 spec:
+  params:
+    - name: SNAPSHOT
+      type: string
   tasks:
     - name: task-success
       taskRef:
@@ -17,29 +20,16 @@ spec:
       params:
         - name: RESULT
           value: SUCCESS
-    - name: task-success-2
+    - name: test-snapshot
       taskRef:
         resolver: git
         params:
           - name: url
-            value: https://github.com/konflux-ci/integration-examples 
+            value: https://github.com/dirgim/integration-examples
           - name: revision
-            value: main
+            value: STONEINTG-1469
           - name: pathInRepo
-            value: tasks/test_output.yaml
+            value: tasks/test_snapshot.yaml
       params:
-        - name: RESULT
-          value: SUCCESS
-    - name: task-skipped
-      taskRef:
-        resolver: git
-        params:
-          - name: url
-            value: https://github.com/konflux-ci/integration-examples 
-          - name: revision
-            value: main
-          - name: pathInRepo
-            value: tasks/test_output.yaml
-      params:
-        - name: RESULT
-          value: SKIPPED
+        - name: SNAPSHOT
+          value: $(params.SNAPSHOT)

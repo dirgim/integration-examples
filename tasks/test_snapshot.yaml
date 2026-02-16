@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: test-snapshot
+spec:
+  params:
+    - name: SNAPSHOT
+      description: The JSON string of the Snapshot under test
+  steps:
+    - name: get-snapshot-json
+      ref:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/konflux-ci/tekton-integration-catalog.git
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: stepactions/get-snapshot-json/0.1/get-snapshot-json.yaml
+      params:
+        - name: snapshot
+          value: $(params.SNAPSHOT)
+    - name: test-snapshot
+      image: quay.io/konflux-ci/konflux-test:stable
+      workingDir: /workspace
+      env:
+        - name: SNAPSHOT
+          value: $(params.SNAPSHOT)
+      script: |
+        #!/bin/bash
+        set -e
+        
+        # Display the stored Snapshot
+        cat snapshot.json
+       
+        # Run custom tests on the snapshot in question
+        # ...
