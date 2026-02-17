@@ -12,9 +12,9 @@ spec:
         resolver: git
         params:
           - name: url
-            value: https://github.com/konflux-ci/tekton-integration-catalog.git
+            value: https://github.com/dirgim/tekton-integration-catalog.git
           - name: revision
-            value: main
+            value: STONEINTG-1469
           - name: pathInRepo
             value: stepactions/get-snapshot-json/0.1/get-snapshot-json.yaml
       params:
